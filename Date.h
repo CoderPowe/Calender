@@ -8,50 +8,23 @@ char *DAYS[]={"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sun
 char *MONTHS[]={"January","February","March","April","May","June","July","August","September","October","November","December"};
 const DATE D={.day=1,.month=1,.year=1900};
 int is_leap_year(int y){
-    int res;
-    if(y%100==0 && y%400==0){
-       res=1;
-    }
-    else if(y%100!=0 && y%4==0){
-        res=1;
-    }
-    else
-    res=0;
-    return res;
+    return ((y%100 == 0 && y%400 == 0)||(y%100 != 0 && y%4 == 0));
 }
 int days_between_years(int y1,int y2){
-    int res=0;
-    int first_leap=0,last_leap=0;
-    int i=y1;
-    int found=0;
-   while(i<=y2){
-   if(is_leap_year(i))
-   {
-      found=1;
+    int lp1 = 0,lp2 = 0;
+   for(int i = y1; i <= y2; i++){
+      if(is_leap_year(i)){
+      lp1=i;
       break;
    }
-    i++;
   }
-   if(found)
-   first_leap=i;
-   found=0;
-   i=y2;
-   while(i>=y1){
+   for(int i = y2;i >= y1; i--){
       if(is_leap_year(i)){
-         found=1;
+         lp2=i;
          break;
       }
-      i--;
    }
-   if(found)
-   last_leap=i;
-   int total_leap=0;
-   if(last_leap==0);
-   else{
-      total_leap=(last_leap-first_leap)/4+1;
-   }
-   res=total_leap*366+(y2-y1+1-total_leap)*365; 
-  return res;
+  return (y2-y1+1)*365 + ((lp1 != 0 && lp2 != 0)? (lp2-lp1)/4 + 1 : 0);
 }
 int days_between_months(int m1,int m2){
    int res=0;
@@ -95,10 +68,8 @@ int days_between_dates(DATE a,DATE b){
   return res;
 }
 char* get_day_name(DATE a){
-   int total_days=days_between_dates(D,a);
    static char *res;
-   int rem=total_days%7;
-   res=DAYS[rem];
+   res=DAYS[days_between_dates(D,a)%7];
    return res;
 }
 int years_from_days(int days){
@@ -107,4 +78,3 @@ int years_from_days(int days){
 int months_from_days(int days){
    return days/30;
 }
-

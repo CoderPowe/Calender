@@ -1,8 +1,8 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include "Date.h"
-#include "Design.h"
+#include "date.h"
+#include "design.h"
 void help(){
   printf("\n1.Day name of a date");
   printf("\n2.Days between two dates");
